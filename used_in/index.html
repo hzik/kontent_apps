@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		
+		<title>Kontent.ai "Used in"</title>
+		
+		<link rel="stylesheet" type="text/css" href="../plugins/datatables.min.css"/> 
+		<link rel="stylesheet" type="text/css" href="../plugins/font-awesome.min.css">
+		<script type="text/javascript" src="../plugins/datatables.min.js"></script>
+		
+		<script type="text/javascript" src="export.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		
+	</head>
+	<body>
+	
+		<div class="overlay">Getting data</div>
+		
+		<div class="app_name">"Used in" items</div>
+	
+		<div class="top-bar">
+			Project ID: <input size="40" type="text" name="project" id="project" class="input" />
+			Language codename (optional): <input size="10" type="text" name="lang" id="lang" class="input" /><br />
+			Preview API key (optional): <input size="50" type="text" name="prev" id="prev" class="input" />
+			Show only orphaned items: <input type="checkbox" id="orphaned" name="orphaned" value="Orphaned">
+			<input id="submit" type="submit" value="Submit" class="submit" />
+		</div>
+		<div id="msg"></div>
+		<div id="tables"></div>
+		
+	</body>
+	
+</html>
+
