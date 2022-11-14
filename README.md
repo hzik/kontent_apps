@@ -1,3 +1,3 @@
 # Kontent Apps
 
-Variety of helpinh Kontent.ai apps
+Variety of supporting Kontent.ai apps
