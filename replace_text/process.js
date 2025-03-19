@@ -1,5 +1,6 @@
 var items = [];
 var items_changed = [];
+var onlyFind = false;
 var publish = false;
 var publishReplace = false;
 var type_ids = [];
@@ -24,6 +25,7 @@ $(document).ready(function()
 		target = $("#target").val();
 		type_ids = [];
 		type_texts = [];
+		onlyFind = $("#onlyfind").is(':checked');
 		publish = $("#publish").is(':checked');
 		publishReplace = $("#publishreplace").is(':checked');
 		$("#tables").html("");
@@ -34,7 +36,7 @@ $(document).ready(function()
 		archivedSteps = [];
 		$("#output").html("");
 		
-		if (source && target) {
+		if ((source && target) || (source && onlyFind)) {
 			$('.overlay').show();
 			loadWF();
 		}
@@ -92,7 +94,7 @@ function loadTypes(xc) {
 		success: function (data, textStatus, request) {
 			data = JSON.parse(data);
 			if (data.types.length > 0) {				
-				var xc = request.getResponseHeader('X-Continuation');
+				var xc = data.pagination.continuation_token;;
 				for (var x = 0; x < data.types.length; x++) {
 					processed++;
 					type_ids.push(data.types[x].id);
@@ -139,7 +141,9 @@ function loadItems(type,xc) {
 			data = JSON.parse(data);
 			if (data.variants.length > 0) {
 				processItems(data.variants);
-				var xc = request.getResponseHeader('X-Continuation');
+				xc = data.pagination.continuation_token;
+				console.log(xc);
+				console.log(type);
 				if (xc) {
 					loadItems(type,xc);
 				}
@@ -147,7 +151,14 @@ function loadItems(type,xc) {
 					processed--;
 					if (processed==0) {
 						$('.overlay').hide();
-						replaceText();
+						if (onlyFind) {
+							console.log("find");
+							findText();
+						}
+						else {
+							console.log("replace");
+							replaceText();
+						}
 					}
 					else {
 						loadItems(processed,"")
@@ -158,7 +169,14 @@ function loadItems(type,xc) {
 				processed--;
 				if (processed==0) {
 					$('.overlay').hide();
-					replaceText();
+					if (onlyFind) {
+						console.log("find");
+						findText();
+					}
+					else {
+						console.log("replace");
+						replaceText();
+					}
 				}
 				else {
 					loadItems(processed,"")
@@ -178,6 +196,15 @@ function processItems(data) {
 			if (type_texts.includes(data[x].elements[y].element.id)) {			
 				items.push([data[x].item.id, data[x].language.id, data[x].workflow_step.id, data[x].elements[y].value, data[x].elements[y].element.id]);
 			}
+		}
+	}
+}
+
+function findText() {
+	console.log(items);
+	for (var x = 0; x < items.length; x++) {
+		if (items[x][3].indexOf(source) >= 0) {
+			showMsg("Text found in item "+returnLink(items[x][0], items[x][1])+".");
 		}
 	}
 }
